@@ -20,16 +20,16 @@ export default function PazarPage() {
   const [sort, setSort] = useState("Öne Çıkanlar");
   const [priceRange, setPriceRange] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
-  const [cart, setCart] = useState<string[]>([]);
+  const [cart, setCart] = useState<(number | string)[]>([]);
 
   const filtered = saleArtworks.filter(a => {
     const [, min, max] = PRICE_RANGES[priceRange];
-    const price = fakePrices[a.id];
+    const price = fakePrices[a.id as number];
     return price >= (min as number) && price <= (max as number) &&
       a.title.toLowerCase().includes(search.toLowerCase());
   });
 
-  const addToCart = (id: string) => setCart(c => c.includes(id) ? c.filter(x => x !== id) : [...c, id]);
+  const addToCart = (id: number | string) => setCart(c => c.includes(id) ? c.filter(x => x !== id) : [...c, id]);
 
   return (
     <>
@@ -103,7 +103,7 @@ export default function PazarPage() {
         {/* Product grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {filtered.map((artwork, i) => {
-            const price = fakePrices[artwork.id];
+            const price = fakePrices[artwork.id as number];
             const inCart = cart.includes(artwork.id);
             return (
               <motion.div
